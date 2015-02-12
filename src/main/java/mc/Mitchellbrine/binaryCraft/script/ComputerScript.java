@@ -12,10 +12,12 @@ import javax.script.ScriptException;
 public class ComputerScript {
 
 	public String scriptCode;
+	public String identifier;
 	public ScriptWorld dummyWorld;
 	public ScriptComputer dummyComp;
 
-	public ComputerScript(ScriptComputer comp, String scriptCode) {
+	public ComputerScript(ScriptComputer comp, String identifier, String scriptCode) {
+		this.identifier = identifier;
 		this.dummyComp = comp;
 		this.scriptCode = scriptCode;
 	}
@@ -36,6 +38,10 @@ public class ComputerScript {
 		} catch (ScriptException ex) {
 			dummyComp.println(ex.toString());
 		}
+	}
+
+	public void setCode(String code) {
+		this.scriptCode = code;
 	}
 
 

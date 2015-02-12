@@ -25,6 +25,8 @@ public class BinaryCraft {
 	@Mod.Instance
 	public static BinaryCraft instance;
 
+	public static ScriptEngine jsEngine;
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
@@ -38,12 +40,12 @@ public class BinaryCraft {
 		System.out.println(StringHelper.fromBinary(StringHelper.toBinaryBytes(hello)));
 
 		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine engine = factory.getEngineByName("JavaScript");
+		jsEngine = factory.getEngineByName("JavaScript");
 
-		engine.put("hello",hello);
-		engine.put("helloBinary",StringHelper.toBinary(hello));
+		jsEngine.put("hello",hello);
+		jsEngine.put("helloBinary",StringHelper.toBinary(hello));
 		try {
-			engine.eval("println(hello)\n\nprintln(helloBinary)");
+			jsEngine.eval("println(hello)\n\nprintln(helloBinary)");
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
