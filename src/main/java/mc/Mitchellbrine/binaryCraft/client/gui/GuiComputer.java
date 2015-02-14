@@ -1,11 +1,16 @@
 package mc.Mitchellbrine.binaryCraft.client.gui;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
+import mc.Mitchellbrine.binaryCraft.container.ContainerComputer;
+import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
+import mc.Mitchellbrine.binaryCraft.network.ScriptPacket;
 import mc.Mitchellbrine.binaryCraft.script.ComputerScript;
 import mc.Mitchellbrine.binaryCraft.tile.TileEntityComputer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 
@@ -14,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by Mitchellbrine on 2015.
  */
-public class GuiComputer extends GuiScreen {
+public class GuiComputer extends GuiContainer {
 
 	private TileEntityComputer te;
 
@@ -28,6 +33,7 @@ public class GuiComputer extends GuiScreen {
 	private GuiButton removeButton;
 
 	public GuiComputer(TileEntityComputer te) {
+		super(new ContainerComputer(te));
 		this.te = te;
 		refreshScripts();
 	}
@@ -91,35 +97,44 @@ public class GuiComputer extends GuiScreen {
 		return fontRendererObj;
 	}
 
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
 
 	@Override
 	public void drawScreen(int p_571_1_, int p_571_2_, float p_571_3_) {
-		this.list.drawScreen(p_571_1_, p_571_2_, p_571_3_);
+
+		super.drawScreen(p_571_1_, p_571_2_, p_571_3_);
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float par1, int mouseX, int mouseY) {
+
+		this.list.drawScreen(mouseX,mouseY,par1);
+
 		this.drawString(this.fontRendererObj, "Scripts: ", 10, 16, 0xFFFFFF);
-		if (selectedScript != null) {
-			this.drawCenteredString(this.fontRendererObj, this.selectedScript.identifier + ":", this.width / 2, 16, 0xFFFFFF);
-		} else {
-			this.drawCenteredString(this.fontRendererObj, "<Script Not Found>", this.width / 2, 16, 0xFF0000);
-		}
+		this.drawCenteredString(this.fontRendererObj, "BiC Terminal", this.width / 2, 16, 0xFFFFFF);
 
 
 		if (selectedScript != null) {
 			GL11.glEnable(GL11.GL_BLEND);
 			int offset = ( this.listWidth + this.width ) / 2;
 
-			int yHeight = 45;
-			int xLength = listWidth + 10;
-
-			for (String string : this.selectedScript.dummyComp.getConsole().split("\n")) {
-					this.drawString(fontRendererObj, string, xLength, yHeight, 0xFFFFFF);
-					yHeight += 10;
-					if (yHeight > this.height) {
-						this.selectedScript.dummyComp.computer.consoleOutput = "";
-						break;
-					}
-			}
 
 			GL11.glDisable(GL11.GL_BLEND);
+		}
+
+
+		int yHeight = 45;
+		int xLength = listWidth + 10;
+
+		for (String string : this.te.consoleOutput.split("\n")) {
+			this.drawString(fontRendererObj, string, xLength, yHeight, 0xFFFFFF);
+			yHeight += 10;
+			if (yHeight > this.height) {
+				this.te.consoleOutput = "";
+				break;
+			}
 		}
 	}
 
@@ -127,12 +142,16 @@ public class GuiComputer extends GuiScreen {
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
 			case 21:
-				scripts.remove(selectedScript);
-				mc.thePlayer.closeScreen();
+				if (this.selectedScript != null) {
+					Minecraft.getMinecraft().displayGuiScreen(new GuiScriptEditor(this.te, this.selectedScript.identifier, this.selectedScript.scriptCode));
+				}
 				break;
 			case 20:
-				mc.thePlayer.closeScreen();
 				Minecraft.getMinecraft().displayGuiScreen(new GuiScriptEditor(this.te));
+				break;
+			case 6:
+				PacketHandler.INSTANCE.sendToServer(new ScriptPacket(this.te,this.te.getWorldObj().provider.dimensionId));
+				Minecraft.getMinecraft().thePlayer.closeScreen();
 				break;
 		}
 		super.actionPerformed(button);

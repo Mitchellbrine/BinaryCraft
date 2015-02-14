@@ -5,6 +5,8 @@ import mc.Mitchellbrine.binaryCraft.script.obj.ScriptWorld;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Mitchellbrine on 2015.
@@ -28,16 +30,33 @@ public class ComputerScript {
 		engine.put("comp",this.dummyComp);
 
 		if (dummyWorld == null) {
-			dummyComp.getWorld();
+			dummyWorld = dummyComp.getWorld();
 		}
 
 		engine.put("world",this.dummyWorld);
 
+		engine.put("x",dummyComp.getX());
+		engine.put("y",dummyComp.getY());
+		engine.put("z",dummyComp.getZ());
+
 		try {
 			engine.eval(this.scriptCode);
 		} catch (ScriptException ex) {
-			dummyComp.println(ex.toString());
+			ex.printStackTrace();
+			String oldOutput = dummyComp.getConsole();
+			dummyComp.computer.consoleOutput = oldOutput + "\n" + ex.toString().replaceAll(":",":\n ");
 		}
+	}
+
+	public void run(ScriptEngine engine, ArrayList<String> stringValues, ArrayList<Object> objectValues) {
+		if (stringValues.size() == objectValues.size()) {
+			for (int i = 0; i < stringValues.size(); i++) {
+				engine.put(stringValues.get(i),objectValues.get(i));
+			}
+		}
+
+		this.run(engine);
+
 	}
 
 	public void setCode(String code) {

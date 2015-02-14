@@ -1,5 +1,6 @@
 package mc.Mitchellbrine.binaryCraft.block;
 
+import mc.Mitchellbrine.binaryCraft.BinaryCraft;
 import mc.Mitchellbrine.binaryCraft.client.gui.GuiHandler;
 import mc.Mitchellbrine.binaryCraft.tile.TileEntityComputer;
 import mc.Mitchellbrine.binaryCraft.util.References;
@@ -8,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -34,9 +36,18 @@ public class BlockComputer extends BlockContainer {
 		TileEntityComputer computer = (TileEntityComputer) world.getTileEntity(x,y,z);
 		if (computer != null) {
 			if (world.isRemote) {
-				GuiHandler.openGui(GuiHandler.IDS.COMPUTER, computer);
+				player.openGui(BinaryCraft.instance,0,world,x,y,z);
 			}
 		}
 		return false;
+	}
+
+	public int isProvidingWeakPower(IBlockAccess access, int x, int y, int z, int direction)
+	{
+		TileEntityComputer computer = (TileEntityComputer) access.getTileEntity(x,y,z);
+		if (computer != null) {
+			return computer.getPower();
+		}
+		return 0;
 	}
 }

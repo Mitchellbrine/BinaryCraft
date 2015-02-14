@@ -3,11 +3,14 @@ package mc.Mitchellbrine.binaryCraft;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import mc.Mitchellbrine.binaryCraft.block.BlockRegistry;
 import mc.Mitchellbrine.binaryCraft.item.ItemRegistry;
+import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
 import mc.Mitchellbrine.binaryCraft.proxy.CommonProxy;
 import mc.Mitchellbrine.binaryCraft.util.References;
 import mc.Mitchellbrine.binaryCraft.util.StringHelper;
+import mc.Mitchellbrine.binaryCraft.util.SyntaxHelper;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -33,6 +36,8 @@ public class BinaryCraft {
 		proxy.renderStuff();
 		BlockRegistry.init();
 		ItemRegistry.init();
+		PacketHandler.init();
+		SyntaxHelper.init();
 
 		String hello = "Hello World!";
 		System.out.println(hello);
