@@ -2,6 +2,8 @@ package mc.Mitchellbrine.binaryCraft.client.gui;
 
 import cpw.mods.fml.client.GuiScrollingList;
 import mc.Mitchellbrine.binaryCraft.BinaryCraft;
+import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
+import mc.Mitchellbrine.binaryCraft.network.RunScriptPacket;
 import mc.Mitchellbrine.binaryCraft.script.ComputerScript;
 import net.minecraft.client.renderer.Tessellator;
 
@@ -29,7 +31,11 @@ public class GuiScriptList extends GuiScrollingList {
 	@Override
 	protected void elementClicked(int var1, boolean var2) {
 		if (this.isSelected(var1)) {
-			scripts.get(var1).run(BinaryCraft.jsEngine);
+			if (scripts.get(var1).scriptCode.contains("comp.isServerScript()")) {
+				PacketHandler.INSTANCE.sendToServer(new RunScriptPacket(this.parent.getTE(),this.parent.getTE().getWorldObj().provider.dimensionId,scripts.get(var1)));
+			} else {
+				scripts.get(var1).run(BinaryCraft.jsEngine);
+			}
 		}
 		this.parent.setIndex(var1);
 	}

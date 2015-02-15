@@ -1,7 +1,12 @@
 package mc.Mitchellbrine.binaryCraft.script;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import mc.Mitchellbrine.binaryCraft.network.ConsolePacket;
+import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
 import mc.Mitchellbrine.binaryCraft.script.obj.ScriptComputer;
 import mc.Mitchellbrine.binaryCraft.script.obj.ScriptWorld;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -45,6 +50,9 @@ public class ComputerScript {
 			ex.printStackTrace();
 			String oldOutput = dummyComp.getConsole();
 			dummyComp.computer.consoleOutput = oldOutput + "\n" + ex.toString().replaceAll(":",":\n ");
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+				PacketHandler.INSTANCE.sendTo(new ConsolePacket(this.dummyComp.computer),(EntityPlayerMP)dummyComp.computer.getWorldObj().getClosestPlayer(this.dummyComp.getX(),this.dummyComp.getY(),this.dummyComp.getZ(),10));
+			}
 		}
 	}
 

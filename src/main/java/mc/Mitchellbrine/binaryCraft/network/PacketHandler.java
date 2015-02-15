@@ -15,6 +15,8 @@ public class PacketHandler {
 	public static void init()
 	{
 		INSTANCE.registerMessage(ScriptPacket.class, ScriptPacket.class, 0, Side.SERVER);
+		INSTANCE.registerMessage(RunScriptPacket.class, RunScriptPacket.class, 1, Side.SERVER);
+		INSTANCE.registerMessage(ConsolePacket.class, ConsolePacket.class, 2, Side.CLIENT);
 	}
 
 }

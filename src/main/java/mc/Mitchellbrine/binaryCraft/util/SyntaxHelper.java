@@ -36,13 +36,13 @@ public class SyntaxHelper {
 
 	public static String getSyntaxedString(String oldString) {
 		String newString = oldString;
-		for (String syntax : SyntaxHelper.syntax) {
+		/*for (String syntax : SyntaxHelper.syntax) {
 			if (!syntax.equalsIgnoreCase("(?:'(.[^']+)')")) {
 				newString = newString.replaceAll(syntax, SyntaxHelper.syntaxToColor.get(syntax) + syntax + EnumChatFormatting.RESET);
 			} else {
 				//newString = newString.replaceAll(syntax, "$1" + syntaxToColor.get(syntax) + inBetweenValue + EnumChatFormatting.RESET + "$2");
 			}
-		}
+		} */
 		return newString;
 	}
 

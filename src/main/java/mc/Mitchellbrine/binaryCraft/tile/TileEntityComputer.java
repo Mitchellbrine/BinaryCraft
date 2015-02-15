@@ -70,6 +70,8 @@ public class TileEntityComputer extends TileEntity {
 				NBTTagCompound tag = nbts.getCompoundTagAt(i);
 				if (tag.hasKey("identifier") && tag.hasKey("code")) {
 					scripts.add(new ComputerScript(new ScriptComputer(this), tag.getString("identifier"), tag.getString("code")));
+				} else {
+					System.err.println("A computer script failed to be read from NBT");
 				}
 			}
 		}
@@ -88,6 +90,16 @@ public class TileEntityComputer extends TileEntity {
 			System.out.println(script.identifier + " " + script.scriptCode);
 		}
 		this.scripts = scripts;
+	}
+
+	public void runScript(ComputerScript script) {
+			for (ComputerScript script1 : scripts) {
+				if (script1.identifier.equalsIgnoreCase(script.identifier)) {
+					System.out.println("Ran a script from the computer");
+					script1.run(BinaryCraft.jsEngine);
+					break;
+				}
+			}
 	}
 
 }

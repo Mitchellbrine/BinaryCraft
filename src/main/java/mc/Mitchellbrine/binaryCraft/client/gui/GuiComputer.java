@@ -156,4 +156,8 @@ public class GuiComputer extends GuiContainer {
 		}
 		super.actionPerformed(button);
 	}
+
+	public TileEntityComputer getTE() {
+		return this.te;
+	}
 }
