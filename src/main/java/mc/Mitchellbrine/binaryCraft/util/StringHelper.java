@@ -1,6 +1,5 @@
 package mc.Mitchellbrine.binaryCraft.util;
 
-import com.sun.istack.internal.NotNull;
 import org.apache.commons.codec.binary.BinaryCodec;
 
 /**
@@ -8,7 +7,7 @@ import org.apache.commons.codec.binary.BinaryCodec;
  */
 public class StringHelper {
 
-	public static char[] toCharArray(@NotNull String string) {
+	public static char[] toCharArray(String string) {
 		char[] result = new char[string.length()];
 		for (int i = 0; i < result.length;i++) {
 			result[i] = string.charAt(i);

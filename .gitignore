@@ -58,6 +58,8 @@ build/
 [Bb]in/
 [Oo]bj/
 
+!src/main/java/mc/Mitchellbrine/binaryCraft/script/obj/
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*

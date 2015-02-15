@@ -19,7 +19,7 @@ apply plugin: 'forge'
 
 version = "1.0"
 group= "mc.Mitchellbrine.binaryCraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "BinaryCraft"
+archivesBaseName = "JS Automation"
 
 minecraft {
     version = "1.7.10-10.13.2.1291"
