@@ -1,9 +1,12 @@
 package mc.Mitchellbrine.binaryCraft.network;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import mc.Mitchellbrine.binaryCraft.script.ComputerScript;
 import mc.Mitchellbrine.binaryCraft.script.obj.ScriptComputer;
@@ -54,10 +57,10 @@ public class RunScriptPacket implements IMessage, IMessageHandler<RunScriptPacke
 
 	@Override
 	public IMessage onMessage(RunScriptPacket message, MessageContext ctx) {
-		TileEntityComputer te = (TileEntityComputer) MinecraftServer.getServer().worldServerForDimension(message.dimension).getTileEntity(message.x, message.y, message.z);
-		if (te != null) {
-			te.runScript(message.script);
-		}
+			TileEntityComputer te = (TileEntityComputer) MinecraftServer.getServer().worldServerForDimension(message.dimension).getTileEntity(message.x, message.y, message.z);
+			if (te != null) {
+				te.runScript(message.script);
+			}
 		return null;
 	}
 }

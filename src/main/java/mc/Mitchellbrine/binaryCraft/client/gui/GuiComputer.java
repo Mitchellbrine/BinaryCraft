@@ -113,7 +113,7 @@ public class GuiComputer extends GuiContainer {
 		this.list.drawScreen(mouseX,mouseY,par1);
 
 		this.drawString(this.fontRendererObj, "Scripts: ", 10, 16, 0xFFFFFF);
-		this.drawCenteredString(this.fontRendererObj, "BiC Terminal", this.width / 2, 16, 0xFFFFFF);
+		this.drawCenteredString(this.fontRendererObj, "JS Terminal", this.width / 2, 16, 0xFFFFFF);
 
 
 		if (selectedScript != null) {

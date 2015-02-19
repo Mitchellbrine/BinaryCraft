@@ -49,7 +49,7 @@ public class ComputerScript {
 		} catch (ScriptException ex) {
 			ex.printStackTrace();
 			String oldOutput = dummyComp.getConsole();
-			dummyComp.computer.consoleOutput = oldOutput + "\n" + ex.toString().replaceAll(":",":\n ");
+			dummyComp.computer.consoleOutput = oldOutput + "\n" + ex.toString().replaceAll(":",":\n ").replaceAll("<Unknown source>",this.identifier);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 				PacketHandler.INSTANCE.sendTo(new ConsolePacket(this.dummyComp.computer),(EntityPlayerMP)dummyComp.computer.getWorldObj().getClosestPlayer(this.dummyComp.getX(),this.dummyComp.getY(),this.dummyComp.getZ(),10));
 			}

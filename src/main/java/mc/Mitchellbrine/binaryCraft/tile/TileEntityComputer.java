@@ -1,10 +1,16 @@
 package mc.Mitchellbrine.binaryCraft.tile;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import mc.Mitchellbrine.binaryCraft.BinaryCraft;
+import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
+import mc.Mitchellbrine.binaryCraft.network.ScriptPacketClient;
 import mc.Mitchellbrine.binaryCraft.script.ComputerScript;
 import mc.Mitchellbrine.binaryCraft.script.obj.ScriptComputer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
@@ -18,6 +24,7 @@ public class TileEntityComputer extends TileEntity {
 
 	public String consoleOutput = "";
 	private int power;
+	public boolean hasFiredTheSearch = false;
 
 	public TileEntityComputer() {
 		power = 0;
@@ -37,6 +44,14 @@ public class TileEntityComputer extends TileEntity {
 				}
 			}
 		}
+		if (worldObj.getTotalWorldTime() % 40 == 0) {
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+				if (worldObj.getClosestPlayer(xCoord, yCoord, zCoord, 200) != null) {
+					PacketHandler.INSTANCE.sendTo(new ScriptPacketClient(this), (EntityPlayerMP) worldObj.getClosestPlayer(xCoord, yCoord, zCoord, 200));
+					//hasFiredTheSearch = true;
+				}
+			}
+		}
 	}
 
 	public ArrayList<ComputerScript> getScripts() {
@@ -50,12 +65,14 @@ public class TileEntityComputer extends TileEntity {
 
 		NBTTagList nbttaglist = new NBTTagList();
 		for (ComputerScript script : scripts) {
+			if (script.scriptCode.equalsIgnoreCase("comp.println('Hello World')")) { continue; }
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setString("identifier", script.identifier);
 			compound.setString("code", script.scriptCode);
 			nbttaglist.appendTag(compound);
 		}
 		nbt.setTag("scripts", nbttaglist);
+		//nbt.setBoolean("hasFiredTheThings",false);
 	}
 
 	@Override
@@ -75,6 +92,10 @@ public class TileEntityComputer extends TileEntity {
 				}
 			}
 		}
+
+		/*if (nbt.hasKey("hasFiredTheThings")) {
+			hasFiredTheSearch = nbt.getBoolean("hasFiredTheThings");
+		} */
 	}
 
 	public int getPower() {
@@ -86,9 +107,9 @@ public class TileEntityComputer extends TileEntity {
 	}
 
 	public void setScripts(ArrayList<ComputerScript> scripts) {
-		for (ComputerScript script : scripts) {
+		/*for (ComputerScript script : scripts) {
 			System.out.println(script.identifier + " " + script.scriptCode);
-		}
+		} */
 		this.scripts = scripts;
 	}
 

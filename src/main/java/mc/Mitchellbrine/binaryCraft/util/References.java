@@ -6,7 +6,7 @@ package mc.Mitchellbrine.binaryCraft.util;
 public class References {
 
 	public static final String MODID = "BinaryCraft";
-	public static final String NAME = "Binary Craft";
+	public static final String NAME = "JS Automation";
 	public static final String VERSION = "001100010010111000110000";
 
 }

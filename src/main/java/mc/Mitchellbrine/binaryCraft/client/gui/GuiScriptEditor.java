@@ -69,7 +69,7 @@ public class GuiScriptEditor extends GuiScreen {
 		this.scriptLine.setMaxStringLength(32767);
 		this.scriptLine.setFocused(false);
 		this.scriptLine.setText(this.code); */
-		this.identifierLine = new GuiTextField(this.fontRendererObj, this.width - 350, 10,150,20);
+		this.identifierLine = new GuiTextField(this.fontRendererObj, this.width / 2 - 75, 10,150,20);
 		this.identifierLine.setMaxStringLength(64);
 		this.identifierLine.setFocused(true);
 		this.identifierLine.setText(this.identifier);
