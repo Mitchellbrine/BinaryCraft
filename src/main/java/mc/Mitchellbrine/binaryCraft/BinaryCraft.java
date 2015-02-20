@@ -14,6 +14,8 @@ import mc.Mitchellbrine.binaryCraft.util.References;
 import mc.Mitchellbrine.binaryCraft.util.StringHelper;
 import mc.Mitchellbrine.binaryCraft.util.SyntaxHelper;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,6 +41,13 @@ public class BinaryCraft {
 	public static ScriptEngine jsEngine;
 
 	public static Logger logger = LogManager.getLogger("JS Automation");
+
+	public static CreativeTabs tab = new CreativeTabs(CreativeTabs.getNextID(),"Scripterino") {
+		@Override
+		public Item getTabIconItem() {
+			return Item.getItemFromBlock(BlockRegistry.binaryComputer);
+		}
+	};
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
