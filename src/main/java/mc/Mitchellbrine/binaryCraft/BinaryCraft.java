@@ -3,12 +3,14 @@ package mc.Mitchellbrine.binaryCraft;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import mc.Mitchellbrine.binaryCraft.block.BlockRegistry;
 import mc.Mitchellbrine.binaryCraft.item.ItemRegistry;
 import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
 import mc.Mitchellbrine.binaryCraft.proxy.CommonProxy;
+import mc.Mitchellbrine.binaryCraft.syntax.Syntaxes;
 import mc.Mitchellbrine.binaryCraft.util.RecipeHandler;
 import mc.Mitchellbrine.binaryCraft.util.References;
 import mc.Mitchellbrine.binaryCraft.util.StringHelper;
@@ -89,6 +91,12 @@ public class BinaryCraft {
 			ex.printStackTrace();
 		}
 	}
+
+	@Mod.EventHandler
+	public void init(FMLInitializationEvent event) {
+		new Syntaxes();
+	}
+
 
 	public static void setFinalStatic(Field field, Object newValue) throws Exception {
 		field.setAccessible(true);

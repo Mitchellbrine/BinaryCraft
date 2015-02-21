@@ -7,6 +7,8 @@ import mc.Mitchellbrine.binaryCraft.network.ConsolePacket;
 import mc.Mitchellbrine.binaryCraft.network.PacketHandler;
 import mc.Mitchellbrine.binaryCraft.script.obj.ScriptComputer;
 import mc.Mitchellbrine.binaryCraft.script.obj.ScriptWorld;
+import mc.Mitchellbrine.binaryCraft.syntax.ScriptSyntax;
+import mc.Mitchellbrine.binaryCraft.syntax.Syntaxes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -46,21 +48,19 @@ public class ComputerScript {
 		engine.put("y",dummyComp.getY());
 		engine.put("z",dummyComp.getZ());
 
-		ScriptEvent.RuntimeSyntaxEvent event = new ScriptEvent.RuntimeSyntaxEvent(this.scriptCode);
+		String runtimeCode = this.scriptCode;
 
-		if (this.scriptCode.contains("comp.setLanguage(\"") || this.scriptCode.contains("comp.setLanguage('")) {
-			String afterQuotation = this.scriptCode.substring(this.scriptCode.indexOf("comp.setLanguage(") + 18);
-			if (this.scriptCode.contains("comp.setLanguage(\"")) {
-			event = new ScriptEvent.RuntimeSyntaxEvent(this.scriptCode,this.scriptCode.substring(this.scriptCode.indexOf("comp.setLanguage(") + 18,this.scriptCode.indexOf("comp.setLanguage(") + 18 + afterQuotation.indexOf("\"") - 1));
-			} else {
-				event = new ScriptEvent.RuntimeSyntaxEvent(this.scriptCode,this.scriptCode.substring(this.scriptCode.indexOf("comp.setLanguage(") + 18,this.scriptCode.indexOf("comp.setLanguage(") + 18 + afterQuotation.indexOf("'") - 1));
+		if (runtimeCode.startsWith("//!")) {
+			for (ScriptSyntax syntax : Syntaxes.syntaxes) {
+				if (runtimeCode.substring(runtimeCode.indexOf("//!") + 3, runtimeCode.substring(runtimeCode.indexOf("//!") + 3).indexOf(" ") + 3).startsWith(syntax.getAbbreviation())) {
+					runtimeCode = syntax.finalText(runtimeCode);
+					break;
+				}
 			}
 		}
 
-
-		if (!MinecraftForge.EVENT_BUS.post(event)) {
 			try {
-				engine.eval(event.scriptCode);
+				engine.eval(runtimeCode);
 			} catch (ScriptException ex) {
 				ex.printStackTrace();
 				String oldOutput = dummyComp.getConsole();
@@ -68,7 +68,6 @@ public class ComputerScript {
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 					PacketHandler.INSTANCE.sendTo(new ConsolePacket(this.dummyComp.computer), (EntityPlayerMP) dummyComp.computer.getWorldObj().getClosestPlayer(this.dummyComp.getX(), this.dummyComp.getY(), this.dummyComp.getZ(), 10));
 				}
-			}
 		}
 	}
 
